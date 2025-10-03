@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Rinosoro Links — QR</title>
+  <style>
+    :root{
+      --bg:#0f1724;
+      --card:#0b1220;
+      --accent:#10b981;
+      --text:#e6eef8;
+      --muted:#9fb0c8;
+      --radius:14px;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      background:linear-gradient(180deg,#071025 0%, #07192b 100%);
+      color:var(--text);
+      min-height:100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:24px;
+    }
+    .card{
+      width:100%;
+      max-width:420px;
+      background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      border-radius:var(--radius);
+      padding:22px;
+      box-shadow: 0 8px 30px rgba(2,6,23,0.6);
+      border:1px solid rgba(255,255,255,0.03);
+    }
+    h1{margin:0 0 6px;font-size:20px}
+    p.lead{margin:0 0 18px;color:var(--muted);font-size:13px}
+    .links{display:flex;flex-direction:column;gap:12px}
+    .link-btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      padding:12px 14px;
+      border-radius:12px;
+      text-decoration:none;
+      color:var(--text);
+      background:linear-gradient(90deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      border:1px solid rgba(255,255,255,0.03);
+      transition:transform .08s ease, box-shadow .08s ease;
+    }
+    .link-btn:hover{transform:translateY(-4px); box-shadow:0 10px 30px rgba(2,6,23,0.55)}
+    .label{display:flex;flex-direction:column}
+    .label .title{font-weight:600}
+    .label .subtitle{font-size:12px;color:var(--muted)}
+    .badge{font-size:12px;background:rgba(255,255,255,0.03);padding:6px 10px;border-radius:999px;border:1px solid rgba(255,255,255,0.02)}
+    footer{margin-top:16px;text-align:center;color:var(--muted);font-size:12px}
+    .qr-row{display:flex;gap:12px;align-items:center;margin-top:14px;flex-wrap:wrap}
+    .qr-img{width:84px;height:84px;border-radius:8px;border:1px solid rgba(255,255,255,0.04);display:flex;align-items:center;justify-content:center;background:#071026;color:var(--muted);font-size:12px;padding:6px}
+    .muted-small{font-size:12px;color:var(--muted)}
+  </style>
+</head>
+<body>
+  <div class="card" id="card">
+    <h1>Escolha uma opção</h1>
+    <p class="lead">Escaneie o QR (apontando para a URL desta página) para abrir os links.</p>
+
+    <div class="links" id="linksContainer"></div>
+
+    <div class="qr-row">
+      <div class="qr-img" id="qrPreview">QR</div>
+      <div>
+        <div class="muted-small">Depois de subir no GitHub Pages:</div>
+        <div class="muted-small">Acesse a URL pública (ex.: https://seuusuario.github.io/RAV/)</div>
+      </div>
+    </div>
+
+    <footer>
+      Criado para campanha Rinosoro — 3 links em um só QR.
+    </footer>
+  </div>
+
+  <script>
+    const links = [
+      { title: "Rinosoro Alto Volume", subtitle: "Abrir no Instagram", url: "https://www.instagram.com/reel/C-S2bGHOSvA/?igsh=MW5zcDNiczZrbGV6Yg==" },
+      { title: "Rinosoro Alto Volume", subtitle: "Abrir no Instagram", url: "https://www.instagram.com/reel/DN5gHf1EpSg/?igsh=Z3R3azJpMmUzejcy" },
+      { title: "Rinosoro Alto Volume", subtitle: "Abrir no Instagram", url: "https://www.instagram.com/share/BARN3AwSxE" }
+    ];
+
+    const container = document.getElementById('linksContainer');
+
+    links.forEach((l) => {
+      const a = document.createElement('a');
+      a.className = 'link-btn';
+      a.href = l.url;
+      a.target = '_blank';
+      a.rel = 'noopener noreferrer';
+      a.innerHTML = `
+        <div class="label">
+          <div class="title">${escapeHtml(l.title)}</div>
+          <div class="subtitle">${escapeHtml(l.subtitle)}</div>
+        </div>
+        <div class="badge">Abrir</div>
+      `;
+      container.appendChild(a);
+    });
+
+    function updateQRPreview() {
+      const pageUrl = location.href;
+      const size = 200;
+      const qrSrc = `https://chart.googleapis.com/chart?cht=qr&chs=${size}x${size}&chl=${encodeURIComponent(pageUrl)}&chld=L|1`;
+      const qrDiv = document.getElementById('qrPreview');
+      qrDiv.innerHTML = '';
+      const img = document.createElement('img');
+      img.src = qrSrc;
+      img.alt = 'QR code';
+      img.style.maxWidth = '100%';
+      img.style.maxHeight = '100%';
+      img.width = 84;
+      img.height = 84;
+      qrDiv.appendChild(img);
+    }
+
+    function escapeHtml(str) {
+      return String(str)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
+    updateQRPreview();
+  </script>
+</body>
+</html>
