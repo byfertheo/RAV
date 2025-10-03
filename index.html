@@ -105,7 +105,7 @@
       container.appendChild(a);
     });
 
-    #function updateQR() {
+    function updateQR() {
       const pageUrl = location.href;
       const size = 200;
       const qrSrc = `https://chart.googleapis.com/chart?cht=qr&chs=${size}x${size}&chl=${encodeURIComponent(pageUrl)}&chld=L|1`;
